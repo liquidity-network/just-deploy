@@ -1,0 +1,6 @@
+web3==4.0.0
+
+bitcoin==1.1.42
+ecdsa==0.13
+
+termcolor==1.1.0
