@@ -35,9 +35,11 @@ contract_class = web3.eth.contract(bytecode=bytecode, abi=[])
 deployment_transaction = contract_class.constructor().buildTransaction({
     'gasPrice': web3.toWei('25', 'gwei'),
 })
+print('Gas Cost: {}'.format(deployment_transaction.get('gas')))
 nonce = web3.eth.getTransactionCount(wallet_address)
 deployment_transaction['nonce'] = nonce
 deployment_transaction['to'] = ''
+
 
 print('Nonce: {}'.format(nonce))
 
