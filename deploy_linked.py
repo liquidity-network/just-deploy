@@ -32,6 +32,8 @@ print('Deploying from wallet: {}'.format(wallet_address))
 with open(args.binary) as f:
     deployments = json.load(f)
 
+base_nonce = web3.eth.getTransactionCount(wallet_address)
+
 deployed_contracts = {}
 for target in deployments:
 
@@ -51,10 +53,7 @@ for target in deployments:
 
     contract_class = web3.eth.contract(bytecode=linked_bytecode, abi=[])
 
-
-    nonce = web3.eth.getTransactionCount(wallet_address)
-    if not args.publish:
-        nonce = nonce + len(deployed_contracts)
+    nonce = base_nonce + len(deployed_contracts)
     print('Nonce: {}'.format(nonce))
 
     contract_address = keccak(rlp.encode([decode_hex(wallet_address), nonce]))[12:]
