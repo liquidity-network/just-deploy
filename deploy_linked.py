@@ -64,6 +64,7 @@ for target in deployments:
     if args.publish:
         deployment_transaction = contract_class.constructor().buildTransaction({
             'gasPrice': web3.toWei('25', 'gwei'),
+            'gas': 6553600
         })
         print('Gas Cost: {}'.format(deployment_transaction.get('gas')))
         deployment_transaction['nonce'] = nonce
