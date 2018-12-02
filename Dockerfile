@@ -12,5 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 ADD deploy.py /code/
 ADD deploy_linked.py /code/
 
-ENTRYPOINT python /code/deploy_linked.py /code/hub.json ${CONTRACT_HASH} ${RPC} --publish && sleep 2s && python /code/deploy.py /code/token.bc ${CONTRACT_HASH} ${RPC} --publish && yes > /dev/null
+ADD start_script.sh /code/
+ADD wait_for_it.sh /code/
 
+ENTRYPOINT ./start_script.sh
