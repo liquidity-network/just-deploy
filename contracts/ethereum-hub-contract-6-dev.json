@@ -29,11 +29,11 @@
     "parameters": [
       {
         "type": "uint",
-        "value": 8640
+        "value": 60
       },
       {
         "type": "address",
-        "value": "0x8e0381EE8312C692921daA789a9c9EE0C480a946"
+        "value": "0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1"
       }
     ]
   }
