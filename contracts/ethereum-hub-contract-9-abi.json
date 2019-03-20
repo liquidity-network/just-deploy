@@ -1672,7 +1672,7 @@
   {
     "inputs": [
       {
-        "name": "blocksPerRound",
+        "name": "blocksPerEon",
         "type": "uint256"
       },
       {
