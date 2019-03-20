@@ -1839,7 +1839,7 @@
       },
       {
         "indexed": false,
-        "name": "paint",
+        "name": "activeStateChecksum",
         "type": "bytes32"
       },
       {
