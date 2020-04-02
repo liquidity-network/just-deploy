@@ -1,5 +1,4 @@
 import argparse
-import logging
 import rlp
 from ecdsa import SigningKey, SECP256k1
 from eth_utils import keccak, decode_hex, encode_hex
@@ -31,8 +30,7 @@ wallet_address = web3.toChecksumAddress(keccak(public_key).hex()[24:])
 
 web3.eth.defaultAccount = wallet_address
 
-# print(f'Deploying from wallet: {wallet_address}')
-logging.debug(f"Deploying from wallet {wallet_address}")
+print(f'Deploying from wallet: {wallet_address}')
 
 with open(args.binary) as f:
     bytecode = f.readline().lstrip().rstrip()
@@ -42,16 +40,12 @@ contract_class = web3.eth.contract(bytecode=bytecode, abi=[])
 deployment_transaction = contract_class.constructor().buildTransaction(
     {"gasPrice": web3.toWei("40", "gwei"),}
 )
-# print('Gas Cost: {}'.format(deployment_transaction.get('gas')))
-logging.debug(f"Gas Cost: {deployment_transaction.get('gas')}")
+print('Gas Cost: {}'.format(deployment_transaction.get('gas')))
 nonce = web3.eth.getTransactionCount(wallet_address)
 deployment_transaction["nonce"] = nonce
 deployment_transaction["to"] = ""
 
-
-# print('Nonce: {}'.format(nonce))
-logging.debug(f"Nonce: {nonce}")
-
+print('Nonce: {}'.format(nonce))
 
 web3.eth.enable_unaudited_features()
 signed_transaction = web3.eth.account.signTransaction(
@@ -59,11 +53,9 @@ signed_transaction = web3.eth.account.signTransaction(
 )
 
 contract_address = keccak(rlp.encode([decode_hex(wallet_address), nonce]))[12:]
-# print('Contract address: {}'.format(web3.toChecksumAddress(contract_address)))
+print('Contract address: {}'.format(web3.toChecksumAddress(contract_address)))
 
 if args.publish:
-    # print('Publishing contract to rpc')
-    logging.debug("Publishing contract to rpc")
+    print('Publishing contract to rpc')
     transaction_hash = web3.eth.sendRawTransaction(signed_transaction.rawTransaction)
-    # print('Transaction Hash: {}'.format(encode_hex(transaction_hash)))
-    logging.debug(f"Transaction Hash: {encode_hex(transaction_hash)}")
+    print('Transaction Hash: {}'.format(encode_hex(transaction_hash)))

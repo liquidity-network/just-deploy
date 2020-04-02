@@ -1,5 +1,4 @@
 import argparse
-import logging
 import rlp
 from ecdsa import SigningKey, SECP256k1
 from eth_utils import keccak, decode_hex, encode_hex, remove_0x_prefix
@@ -33,8 +32,7 @@ wallet_address = web3.toChecksumAddress(keccak(public_key).hex()[24:])
 
 web3.eth.defaultAccount = wallet_address
 
-# print('Deploying from wallet: {}'.format(wallet_address))
-logging.debug(f"Deploying from wallet: {wallet_address}")
+print('Deploying from wallet: {}'.format(wallet_address))
 
 with open(args.binary) as f:
     deployments = json.load(f)
@@ -43,8 +41,7 @@ base_nonce = web3.eth.getTransactionCount(wallet_address)
 
 deployed_contracts = {}
 for target in deployments:
-    logging.debug(target.get("name"))
-    # print(target.get('name'))
+    print(target.get('name'))
 
     linked_bytecode = target.get("bytecode")
 
@@ -63,12 +60,10 @@ for target in deployments:
     contract_class = web3.eth.contract(bytecode=linked_bytecode, abi=[])
 
     nonce = base_nonce + len(deployed_contracts)
-    # print('Nonce: {}'.format(nonce))
-    logging.debug(f"Nonce: {nonce}")
+    print('Nonce: {}'.format(nonce))
 
     contract_address = keccak(rlp.encode([decode_hex(wallet_address), nonce]))[12:]
-    # print('Contract address: {}'.format(web3.toChecksumAddress(contract_address)))
-    logging.debug(f"Contract address: {web3.toChecksumAddress(contract_address)}")
+    print('Contract address: {}'.format(web3.toChecksumAddress(contract_address)))
 
     deployed_contracts[target.get("name")] = remove_0x_prefix(
         web3.toChecksumAddress(contract_address)
@@ -78,8 +73,7 @@ for target in deployments:
         deployment_transaction = contract_class.constructor().buildTransaction(
             {"gasPrice": web3.toWei("25", "gwei"), "gas": 6553600}
         )
-        # print('Gas Cost: {}'.format(deployment_transaction.get('gas')))
-        logging.debug(f"Gas Cost: {deployment_transaction.get('gas')}")
+        print('Gas Cost: {}'.format(deployment_transaction.get('gas')))
         deployment_transaction["nonce"] = nonce
         deployment_transaction["to"] = ""
 
@@ -88,10 +82,8 @@ for target in deployments:
             deployment_transaction, private_key=args.key
         )
 
-        # print('Publishing contract to rpc')
-        logging.debug("Publishing contract to rpc")
+        print('Publishing contract to rpc')
         transaction_hash = web3.eth.sendRawTransaction(
             signed_transaction.rawTransaction
         )
-        logging.debug(f"Transaction Hash: {encode_hex(transaction_hash)}")
-        # print('Transaction Hash: {}'.format(encode_hex(transaction_hash)))
+        print('Transaction Hash: {}'.format(encode_hex(transaction_hash)))
