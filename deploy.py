@@ -43,7 +43,6 @@ deployment_transaction['to'] = ''
 
 print('Nonce: {}'.format(nonce))
 
-web3.eth.enable_unaudited_features()
 signed_transaction = web3.eth.account.signTransaction(deployment_transaction, private_key=args.key)
 
 contract_address = keccak(rlp.encode([decode_hex(wallet_address), nonce]))[12:]
