@@ -1,7 +1,4 @@
-web3==4.8.1
-eth-abi==1.2.0
-
+web3>=5.0
+eth-abi
 bitcoin==1.1.42
 ecdsa==0.13
-
-termcolor==1.1.0

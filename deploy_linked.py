@@ -70,7 +70,7 @@ for target in deployments:
         deployment_transaction['nonce'] = nonce
         deployment_transaction['to'] = ''
 
-        web3.eth.enable_unaudited_features()
+#        web3.eth.enable_unaudited_features()
         signed_transaction = web3.eth.account.signTransaction(deployment_transaction, private_key=args.key)
 
         print('Publishing contract to rpc')
