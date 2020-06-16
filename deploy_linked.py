@@ -46,10 +46,13 @@ for target in deployments:
 
     parameters = target.get('parameters')
 
-    if parameters is not None:
+    if parameters:
         types = [param.get('type') for param in parameters]
         values = [param.get('value') for param in parameters]
         linked_bytecode = linked_bytecode + remove_0x_prefix(encode_hex(encode_abi(types, values)))
+        for parameter in parameters:
+            if parameter["type"] == "address":
+                parameter["value"] == wallet_address
 
     contract_class = web3.eth.contract(bytecode=linked_bytecode, abi=[])
 
@@ -57,7 +60,8 @@ for target in deployments:
     print('Nonce: {}'.format(nonce))
 
     contract_address = keccak(rlp.encode([decode_hex(wallet_address), nonce]))[12:]
-    print('Contract address: {}'.format(web3.toChecksumAddress(contract_address)))
+    env_contract = web3.toChecksumAddress(contract_address)
+    print(f'Contract address: {env_contract}')
 
     deployed_contracts[target.get('name')] = remove_0x_prefix(web3.toChecksumAddress(contract_address))
 
@@ -66,7 +70,6 @@ for target in deployments:
             'gasPrice': web3.toWei('25', 'gwei'),
             'gas': 6553600
         })
-        print('Gas Cost: {}'.format(deployment_transaction.get('gas')))
         deployment_transaction['nonce'] = nonce
         deployment_transaction['to'] = ''
 
@@ -76,3 +79,14 @@ for target in deployments:
         print('Publishing contract to rpc')
         transaction_hash = web3.eth.sendRawTransaction(signed_transaction.rawTransaction)
         print('Transaction Hash: {}'.format(encode_hex(transaction_hash)))
+        
+#if args.publish:
+#    import fileinput
+#    with fileinput.input(".env", inplace=True) as env_file:
+#        for line in env_file:
+#            if "HUB_LQD_CONTRACT_ADDRESS" in line:
+#                print(f"HUB_LQD_CONTRACT_ADDRESS={env_contract}")
+#            else:
+#                print(line)
+
+
